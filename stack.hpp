@@ -3,6 +3,13 @@
 
 # include "vector.hpp"
 
+
+//LIFO stack
+//	Stacks are a type of container adaptor, specifically designed to 
+//	operate in a LIFO context (last-in first-out), where elements are 
+//	inserted and extracted only from one end of the container.
+// in this case based on vector container.
+
 namespace ft
 {
 
@@ -10,33 +17,44 @@ template <class T, class Container = vector<T> >
 class stack {
 public:
 
-	//////////////////////////////
-	// Member types
-	//////////////////////////////
+	//////////////////
+	// Member types //
+	//////////////////
 
-	typedef		T				value_type;
-	typedef		Container		container_type;
-	typedef		size_t			size_type;
+	typedef		T				value_type; 	//	Type of the elements
+	typedef		Container		container_type;	//	Type of the underlying container
+	typedef		size_t			size_type;		//	usually the same as size_t
 
-	//////////////////////////////
-	// Member functions
-	//////////////////////////////
+	//////////////////////
+	// Member functions //
+	//////////////////////
+
+	//	Construct stack
+	//	Constructs a stack container adaptor object.
 
 	explicit stack (const container_type & ctnr = container_type())
 	{
 		_ctnr = ctnr;
 	}
 
+	//Return size
+	//	Returns the number of elements in the stack.
 	size_type size (void) const
 	{
 		return (_ctnr.size());
 	}
 
+	//	Test whether container is empty
+	//	Returns whether the stack is empty: i.e. whether its size is zero.
 	bool empty (void) const
 	{
 		return (_ctnr.empty());
 	}
 
+	//	Access next element
+	//	Returns a reference to the top element in the stack.
+	//	Since stacks are last-in first-out containers, the top element 
+	//	is the last element inserted into the stack.
 	value_type & top (void)
 	{
 		return (_ctnr.back());
@@ -47,27 +65,37 @@ public:
 		return (_ctnr.back());
 	}
 
+	//	Inserts a new element at the top of the stack, above its current 
+	//	top element. The content of this new element is initialized to a copy of val.
+	
+	//	This member function effectively calls the member function 
+	//	push_back of the underlying container object.
 	void push (const value_type & val)
 	{
 		_ctnr.push_back(val);
 	}
 
+	//	Removes the element on top of the stack, effectively reducing its size by one.
+	//	This member function effectively calls the member function pop_back of 
+	//	the underlying container object.
 	void pop (void)
 	{
 		_ctnr.pop_back();
 	}
 
-	//////////////////////////////
-	// Member variables
-	//////////////////////////////
+	///////////////////////
+	// Member variables //
+	//////////////////////
 
 private:
 	container_type		_ctnr;
 
-	//////////////////////////////
-	// Relational operators
-	//////////////////////////////
+	//////////////////////////
+	// Relational operators //
+	//////////////////////////
 
+	//Each of these operator overloads calls the same operator on the underlying container objects.
+	
 	friend bool operator== (const stack & lhs, const stack & rhs)
 	{
 		return (lhs._ctnr == rhs._ctnr);

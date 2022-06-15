@@ -2,7 +2,6 @@
 # include <fstream>
 # include <cstring>
 # include <iostream>
-#include <chrono>
 
 # include "../vector.hpp"
 
@@ -17,25 +16,15 @@
 template <class T>
 void checkVectorsDiff(std::vector<T>& stl_vector, ft::vector<T>& ft_vector)
 {
-	auto start = std::chrono::high_resolution_clock::now();
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-	std::cout << "Time taken by function: " << duration.count() << " microseconds" << std::endl;
+
 
 	if (stl_vector.size() == ft_vector.size())
 		std::cout << GREEN << std::endl << "=> size() [OK]" << std::endl;
 	else
 		std::cout << RED << "size() [ERROR]" << std::endl;
-	start = std::chrono::high_resolution_clock::now();
+
 	std::cout << "[STL] Size = " << stl_vector.size() << std::endl;
-	stop = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-	std::cout << "Time taken by function: " << duration.count() << " microseconds" << std::endl;
-	start = std::chrono::high_resolution_clock::now();	
 	std::cout << "[FT]  Size = " << ft_vector.size() << std::endl;
-	stop = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-	std::cout << "Time taken by function: " << duration.count() << " microseconds" << std::endl;
 
 	if (stl_vector.max_size() == ft_vector.max_size())
 		std::cout << GREEN << std::endl << "=> max_size() [OK]" << std::endl;

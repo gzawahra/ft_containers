@@ -10,9 +10,9 @@ template <class T, class Alloc = std::allocator<T> >
 class vector {
 public:
 
-	//////////////////////////////
-	// Iterator subclass
-	//////////////////////////////
+	///////////////////////
+	// Iterator subclass //
+	///////////////////////
 
 	template <bool IsConst>
 	class vectorIterator {
@@ -62,34 +62,34 @@ public:
 		value_type *			_ptr;
 	}; // Iterator
 
-	//////////////////////////////
-	// Member types
-	//////////////////////////////
+	//////////////////
+	// Member types //
+	//////////////////
 
-	typedef		T												value_type;
-	typedef		Alloc											allocator_type;
-	typedef		typename allocator_type::reference				reference;
-	typedef		typename allocator_type::const_reference		const_reference;
-	typedef		typename allocator_type::pointer				pointer;
-	typedef		typename allocator_type::const_pointer			const_pointer;
-	typedef		vectorIterator<false>							iterator;
-	typedef		vectorIterator<true>							const_iterator;
-	typedef		ft::reverse_iterator<iterator>					reverse_iterator;
-	typedef		ft::reverse_iterator<const_iterator>			const_reverse_iterator;
-	typedef		typename vectorIterator<false>::difference_type	difference_type;
-	typedef		typename vectorIterator<false>::size_type		size_type;
+	typedef		T												value_type;			   //The first template parameter (T)
+	typedef		Alloc											allocator_type;		   //The second template parameter (Alloc)
+	typedef		typename allocator_type::reference				reference;		       //for the default allocator: value_type&
+	typedef		typename allocator_type::const_reference		const_reference;	   //for the default allocator: const value_type&
+	typedef		typename allocator_type::pointer				pointer;			   //for the default allocator: value_type*
+	typedef		typename allocator_type::const_pointer			const_pointer;		   //for the default allocator: const value_type*
+	typedef		vectorIterator<false>							iterator;		  	   //convertible to const_iterator
+	typedef		vectorIterator<true>							const_iterator;		   //a random access iterator to const value_type
+	typedef		ft::reverse_iterator<iterator>					reverse_iterator;	   //reverse_iterator<iterator>
+	typedef		ft::reverse_iterator<const_iterator>			const_reverse_iterator;//reverse_iterator<const_iterator>
+	typedef		typename vectorIterator<false>::difference_type	difference_type;	   //a signed integral type, identical to: iterator_traits<iterator>::difference_type
+	typedef		typename vectorIterator<false>::size_type		size_type;			   //an unsigned integral type that can represent any non-negative value of difference_type
 
-	//////////////////////////////
-	// Constructors
-	//////////////////////////////
+	//////////////////
+	// Constructors //
+	//////////////////
 
 	//default constructor : Constructs an empty container, with no elements.
 	explicit vector (const allocator_type & alloc = allocator_type())
 	{
-		_alloc = alloc;
-		_vct = _alloc.allocate(0);
-		_size = 0;
-		_capacity = 0;
+		_alloc = alloc; 			//	allocator object
+		_vct = _alloc.allocate(0);	//	vector var
+		_size = 0;					//	number of current values
+		_capacity = 0;				// 	number of possible values to be held in vector
 	}
 
 	//fill constructor: Constructs a container with n elements. Each element is a copy of val.
@@ -122,34 +122,36 @@ public:
 		for (size_type i = 0 ; i < n ; i++)
 			_alloc.construct(_vct + i, *first++);
 	}
+
 	//copy constructor: Constructs a container with a copy of each of the elements in x, in the same order.
 	vector (const vector & x)
 	{
 		_alloc = x._alloc;
 		_size = x._size;
-		_capacity = x._capacity;
-		_vct = _alloc.allocate(_capacity);
+		_capacity = x._size; //weirdly the std::vector doesn't copy capacity size from orgin it copies origin size in capacity
+		_vct = _alloc.allocate(_capacity); // allocate needed capacity and returns pointer to first space in vector.
 
 		for (size_type i = 0 ; i < _size ; i++)
-			_alloc.construct(_vct + i, x[i]);
+			_alloc.construct(_vct + i, x[i]); // constructs element objects 
 	}
 
-	//////////////////////////////
-	// Destructors
-	//////////////////////////////
+	/////////////////
+	// Destructors //
+	/////////////////
+	
 	//This destroys all container elements, and deallocates all the storage 
 	//capacity allocated by the vector using its allocator.
 
 	~vector (void)
 	{
 		for (size_type i = 0 ; i < _size ; i++)
-			_alloc.destroy(_vct + i);
-		_alloc.deallocate(_vct, _capacity);
+			_alloc.destroy(_vct + i); // destroy all values but doesn't deallocate
+		_alloc.deallocate(_vct, _capacity); // deallocate space taken by vector
 	}
 
-	//////////////////////////////
-	// Assignment operator
-	//////////////////////////////
+	/////////////////////////
+	// Assignment operator //
+	/////////////////////////
 
 	//Assigns new contents to the container, replacing its current contents, and modifying its size accordingly.
 	// check if equal else, 
@@ -175,9 +177,9 @@ public:
 		return (*this);
 	}
 
-	//////////////////////////////
-	// Iterators
-	//////////////////////////////
+	///////////////
+	// Iterators //
+	///////////////
 
 	//Return iterator to beginning
 	// Returns an iterator pointing to the first element in the vector.
@@ -203,9 +205,10 @@ public:
 		return (const_iterator(_vct + _size));
 	}
 
-	//////////////////////////////
-	// Reverse iterators
-	//////////////////////////////
+	///////////////////////
+	// Reverse iterators //
+	///////////////////////
+
 	//Return reverse iterator to reverse beginning
 	// Returns a reverse iterator pointing to the last element in the vector (i.e., its reverse beginning).
 	reverse_iterator rbegin (void)
@@ -231,9 +234,10 @@ public:
 		return (const_reverse_iterator(_vct - 1));
 	}
 
-	//////////////////////////////
-	// Capacity
-	//////////////////////////////
+	//////////////
+	// Capacity //
+	//////////////
+
 	//Return size
 	// Returns the number of elements in the vector.
 	size_type size (void) const
@@ -315,9 +319,9 @@ public:
 		}
 	}
 
-	//////////////////////////////
-	// Member access
-	//////////////////////////////
+	///////////////////
+	// Member access //
+	///////////////////
 
 	//	Access element
 	//	Returns a reference to the element at position n in the vector container.
@@ -377,9 +381,9 @@ public:
 		return (_vct[_size - 1]);
 	}
 
-	//////////////////////////////
-	// Assignment modifiers
-	//////////////////////////////
+	//////////////////////////
+	// Assignment modifiers //
+	//////////////////////////
 
 	//	Assign vector content
 	//	Assigns new contents to the vector, replacing its current contents, and modifying its size accordingly.
@@ -419,9 +423,9 @@ public:
 		_size = n;
 	}
 
-	//////////////////////////////
-	// Insertion modifiers
-	//////////////////////////////
+	/////////////////////////
+	// Insertion modifiers //
+	/////////////////////////
 	
 	//	The vector is extended by inserting new elements before the element at the specified position, 
 	//	effectively increasing the container size by the number of elements inserted.
@@ -485,11 +489,10 @@ public:
 		_size = _size + n;
 	}
 
-	//////////////////////////////
-	// Erasure modifiers
-	//////////////////////////////
+	///////////////////////
+	// Erasure modifiers //
+	///////////////////////
 
-	//Erase elements
 	//	Removes from the vector either a single element (position) or a range of elements ([first,last)).
 	iterator erase (iterator position)
 	{
@@ -502,7 +505,7 @@ public:
 		return (position);
 	}
 
-	//	Iterators specifying a range within the vector] to be removed: [first,last). i
+	//	Iterators specifying a range within the vector] to be removed: [first,last).
 	iterator erase (iterator first, iterator last)
 	{
 		size_type		n = last - first;
@@ -513,11 +516,10 @@ public:
 		return (first);
 	}
 
-	//////////////////////////////
-	// Common modifiers
-	//////////////////////////////
+	//////////////////////
+	// Common modifiers //
+	//////////////////////
 
-	//Add element at the end
 	// 	Adds a new element at the end of the vector, after its current last element. 
 	// 	The content of val is copied (or moved) to the new element.
 	void push_back (const value_type & val)
@@ -545,7 +547,6 @@ public:
 		}
 	}
 
-	//Swap content
 	// Exchanges the content of the container by the content of x, 
 	// which is another vector object of the same type. Sizes may differ.
 	void swap (vector & x)
@@ -556,7 +557,6 @@ public:
 		ft::swap(_vct, x._vct);
 	}
 
-	//Clear content
 	//	Removes all elements from the vector (which are destroyed), leaving the container with a size of 0.
 	void clear (void)
 	{
@@ -565,18 +565,19 @@ public:
 		_size = 0;
 	}
 
-	//////////////////////////////
-	// Allocator
-	//////////////////////////////
+	///////////////
+	// Allocator //
+	///////////////
 
+	//	Returns a copy of the allocator object associated with the vector.
 	allocator_type get_allocator (void) const
 	{
 		return (allocator_type());
 	}
 
-	//////////////////////////////
-	// Member variables
-	//////////////////////////////
+	//////////////////////
+	// Member variables //
+	//////////////////////
 
 private:
 	allocator_type		_alloc;
@@ -585,9 +586,9 @@ private:
 	value_type *		_vct;
 }; // Vector
 
-	//////////////////////////////
-	// Relational operators
-	//////////////////////////////
+	//////////////////////////
+	// Relational operators //
+	//////////////////////////
 	
 	//	Performs the appropriate comparison operation between the vector containers lhs and rhs.
 

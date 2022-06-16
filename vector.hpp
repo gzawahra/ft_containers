@@ -128,7 +128,7 @@ public:
 	{
 		_alloc = x._alloc;
 		_size = x._size;
-		_capacity = x._size; //weirdly the std::vector doesn't copy capacity size from orgin it copies origin size in capacity
+		_capacity = x._size; //weirdly the std::vector doesn't copy capacity size from orgin, it copies origin size in capacity
 		_vct = _alloc.allocate(_capacity); // allocate needed capacity and returns pointer to first space in vector.
 
 		for (size_type i = 0 ; i < _size ; i++)

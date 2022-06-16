@@ -10,9 +10,9 @@ template <class Key, class T, class Compare = std::less<Key>, class Alloc = std:
 class map {
 public:
 
-	//////////////////////////////
-	// Node
-	//////////////////////////////
+	//////////
+	// Node //
+	//////////
 
 	typedef struct				s_node
 	{
@@ -27,9 +27,9 @@ public:
 		T &			val (void)	{ return (data.second); }
 	}							node;
 
-	//////////////////////////////
-	// Iterator subclass
-	//////////////////////////////
+	///////////////////////
+	// Iterator subclass //
+	///////////////////////
 
 	template <bool IsConst>
 	class mapIterator {
@@ -105,9 +105,9 @@ public:
 		}
 	}; // Iterator
 
-	//////////////////////////////
-	// Member types
-	//////////////////////////////
+	//////////////////
+	// Member types //
+	//////////////////
 
 	class		ValueCompare;
 
@@ -128,9 +128,9 @@ public:
 	typedef		typename mapIterator<false>::difference_type	difference_type;
 	typedef		typename mapIterator<false>::size_type			size_type;
 
-	//////////////////////////////
-	// Value compare
-	//////////////////////////////
+	///////////////////
+	// Value compare //
+	///////////////////
 
 	class ValueCompare {
 	public:
@@ -145,10 +145,11 @@ public:
 		Compare			comp;
 	};
 
-	//////////////////////////////
-	// Constructors
-	//////////////////////////////
+	//////////////////
+	// Constructors //
+	//////////////////
 
+	//	Constructs an empty container, with no elements.
 	explicit map (const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type())
 	{
 		_alloc = alloc;
@@ -156,6 +157,8 @@ public:
 		this->_new_nil_node();
 	}
 
+	//	Constructs a container with as many elements as the range [first,last), with each element constructed from 
+	//	its corresponding element in that range.
 	template <class InputIterator>
 	map (InputIterator first, InputIterator last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type(),
 	typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type* = 0)
@@ -168,16 +171,19 @@ public:
 			this->insert(*first++);
 	}
 
+	//	Constructs a container with a copy of each of the elements in x.
 	map (const map & x)
 	{
 		this->_new_nil_node();
 		*this = x;
 	}
 
-	//////////////////////////////
-	// Destructors
-	//////////////////////////////
+	/////////////////
+	// Destructors //
+	/////////////////
 
+	// This destroys all container elements, and deallocates all the storage 
+	//	capacity allocated by the map container using its allocator.
 	~map (void)
 	{
 		this->clear();
@@ -185,10 +191,12 @@ public:
 		_alloc.deallocate(_nil, 1);
 	}
 
-	//////////////////////////////
-	// Assignment operator
-	//////////////////////////////
+	/////////////////////////
+	// Assignment operator //
+	/////////////////////////
 
+	// Copies all the elements from x into the container, changing its size accordingly.
+	// The container preserves its current allocator, which is used to allocate additional storage if needed.
 	map & operator= (const map & x)
 	{
 		if (this == &x)
@@ -203,10 +211,11 @@ public:
 		return (*this);
 	}
 
-	//////////////////////////////
-	// Iterators
-	//////////////////////////////
+	///////////////
+	// Iterators //
+	///////////////
 
+	// Returns an iterator referring to the first element in the map container.
 	iterator begin (void)
 	{
 		return (iterator(this->_leftmost(_nil->right)));
@@ -217,6 +226,7 @@ public:
 		return (const_iterator(this->_leftmost(_nil->right)));
 	}
 
+	// Returns an iterator referring to the past-the-end element in the map container.
 	iterator end (void)
 	{
 		return (iterator(_nil));
@@ -227,10 +237,12 @@ public:
 		return (const_iterator(_nil));
 	}
 
-	//////////////////////////////
-	// Reverse iterators
-	//////////////////////////////
+	///////////////////////
+	// Reverse iterators //
+	///////////////////////
 
+	// Returns a reverse iterator pointing to the last element in the container 
+	//(i.e., its reverse beginning).
 	reverse_iterator rbegin (void)
 	{
 		return (reverse_iterator(_nil));
@@ -241,6 +253,8 @@ public:
 		return (const_reverse_iterator(_nil));
 	}
 
+	// Returns a reverse iterator pointing to the theoretical element right before the first element
+	// in the map container (which is considered its reverse end).
 	reverse_iterator rend (void)
 	{
 		return (reverse_iterator(this->_leftmost(_nil->right)));
@@ -251,15 +265,17 @@ public:
 		return (const_reverse_iterator(this->_leftmost(_nil->right)));
 	}
 
-	//////////////////////////////
-	// Capacity
-	//////////////////////////////
+	//////////////
+	// Capacity //
+	//////////////
 
+	// Returns whether the map container is empty (i.e. whether its size is 0).
 	bool empty (void) const
 	{
 		return (_nil == _nil->right);
 	}
 
+	// Returns the number of elements in the map container.
 	size_type size (void) const
 	{
 		size_type n = 0;
@@ -268,25 +284,30 @@ public:
 		return (n);
 	}
 
+	// Returns the maximum number of elements that the map container can hold.
 	size_type max_size (void) const
 	{
 		return (_alloc.max_size());
 	}
 
-	//////////////////////////////
-	// Member access
-	//////////////////////////////
+	///////////////////
+	// Member access //
+	///////////////////
 
+	// If k matches the key of an element in the container, the function returns a 
+	// reference to its mapped value.
 	mapped_type & operator[] (const key_type & k)
 	{
 		this->insert(ft::make_pair(k, mapped_type()));
 		return (this->find(k)->second);
 	}
 
-	//////////////////////////////
-	// Insertion modifiers
-	//////////////////////////////
+	/////////////////////////
+	// Insertion modifiers //
+	/////////////////////////
 
+	// Extends the container by inserting new elements, effectively increasing the container size by 
+	//	the number of elements inserted.
 	ft::pair<iterator,bool> insert (const value_type & val)
 	{
 		iterator it;
@@ -302,12 +323,15 @@ public:
 		}
 	}
 
+	// The function optimizes its insertion time if position points to the element that 
+	//	will precede the inserted element.
 	iterator insert (iterator position, const value_type & val)
 	{
 		(void)position;
 		return (this->insert(val).first);
 	}
 
+	// Copies of the elements in the range [first,last) are inserted in the container.
 	template <class InputIterator>
 	void insert (InputIterator first, InputIterator last,
 	typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type* = 0)
@@ -316,10 +340,12 @@ public:
 			this->insert(*first++);
 	}
 
-	//////////////////////////////
-	// Erasure modifiers
-	//////////////////////////////
+	///////////////////////
+	// Erasure modifiers //
+	///////////////////////
 
+	// Removes from the map container either a single element
+	// This effectively reduces the container size by the number of elements removed, which are destroyed.
 	void erase (iterator position)
 	{
 		node * ptr = position.getPtr();
@@ -344,7 +370,7 @@ public:
 			this->_removeNode(ptr, child);
 		}
 	}
-
+	// erase using unique key
 	size_type erase (const key_type & k)
 	{
 		if (this->count(k))
@@ -354,17 +380,19 @@ public:
 		}
 		return (0);
 	}
-
+	//  or a range of elements ([first,last)).
 	void erase (iterator first, iterator last)
 	{
 		for (iterator it = first++ ; it != last ; it = first++)
 			this->erase(it);
 	}
 
-	//////////////////////////////
-	// Common modifiers
-	//////////////////////////////
+	//////////////////////
+	// Common modifiers //
+	//////////////////////
 
+	// Exchanges the content of the container by the content of x, which is 
+	//	another map of the same type. Sizes may differ.
 	void swap (map & x)
 	{
 		ft::swap(_alloc, x._alloc);
@@ -372,6 +400,8 @@ public:
 		ft::swap(_nil, x._nil);
 	}
 
+	// Removes all elements from the map container (which are destroyed), 
+	//	leaving the container with a size of 0.
 	void clear (void)
 	{
 		iterator first = this->begin();
@@ -379,24 +409,30 @@ public:
 			this->erase(it);
 	}
 
-	//////////////////////////////
-	// Observers
-	//////////////////////////////
+	///////////////
+	// Observers //
+	///////////////
 
+	// Returns a copy of the comparison object used by the container to compare keys.
 	key_compare key_comp (void) const
 	{
 		return (key_compare());
 	}
 
+	// Returns a comparison object that can be used to compare two elements to get whether 
+	//	
+	wthe key of the first one goes before the second.
 	value_compare value_comp (void) const
 	{
 		return (value_compare(_comp));
 	}
 
-	//////////////////////////////
-	// Search operations
-	//////////////////////////////
+	///////////////////////
+	// Search operations //
+	///////////////////////
 
+	// Searches the container for an element with a key equivalent to k and returns an 
+	//	iterator to it if found, otherwise it returns an iterator to map::end.
 	iterator find (const key_type & k)
 	{
 		if (this->count(k))
@@ -413,6 +449,7 @@ public:
 			return (this->end());
 	}
 
+	// Searches the container for elements with a key equivalent to k and returns the number of matches.
 	size_type count (const key_type & k) const
 	{
 		size_type n = 0;
@@ -424,10 +461,12 @@ public:
 		return (n);
 	}
 
-	//////////////////////////////
-	// Bound operations
-	//////////////////////////////
+	//////////////////////
+	// Bound operations //
+	//////////////////////
 
+	// Returns an iterator pointing to the first element in the container whose key is not considered to go
+	// before k (i.e., either it is equivalent or goes after).
 	iterator lower_bound (const key_type & k)
 	{
 		iterator it = this->begin();
@@ -444,6 +483,8 @@ public:
 		return (it);
 	}
 
+	//	Returns an iterator pointing to the first element in the container 
+	//	whose key is considered to go after k.
 	iterator upper_bound (const key_type & k)
 	{
 		iterator it = this->begin();
@@ -460,6 +501,8 @@ public:
 		return (it);
 	}
 
+	// Returns the bounds of a range that includes all the elements in the container which 
+	// have a key equivalent to k.
 	ft::pair<iterator,iterator> equal_range (const key_type & k)
 	{
 		return (ft::make_pair(this->lower_bound(k), this->upper_bound(k)));
@@ -470,18 +513,19 @@ public:
 		return (ft::make_pair(this->lower_bound(k), this->upper_bound(k)));
 	}
 
-	//////////////////////////////
-	// Allocator
-	//////////////////////////////
+	///////////////
+	// Allocator //
+	///////////////
 
+	// yReturns a copy of the allocator object associated with the map.
 	allocator_type get_allocator (void) const
 	{
 		return (allocator_type());
 	}
 
-	//////////////////////////////
-	// Private functions
-	//////////////////////////////
+	///////////////////////
+	// Private functions //
+	///////////////////////
 
 private:
 	void _new_nil_node (void)
@@ -616,9 +660,9 @@ private:
 		return (this->_comp(lhs, rhs) == false && this->_comp(rhs, lhs) == false);
 	}
 
-	//////////////////////////////
-	// Red and Black Tree
-	//////////////////////////////
+	////////////////////////
+	// Red and Black Tree //
+	////////////////////////
 
 	void _insertRB (node * x)
 	{
@@ -773,18 +817,18 @@ private:
 		x->right = parent;
 	}
 
-	//////////////////////////////
-	// Member variables
-	//////////////////////////////
+	//////////////////////
+	// Member variables //
+	//////////////////////
 
 	allocator_type		_alloc;
 	key_compare			_comp;
 	node *				_nil;
 }; // Map
 
-	//////////////////////////////
-	// Relational operators
-	//////////////////////////////
+	//////////////////////////
+	// Relational operators //
+	//////////////////////////
 
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator== (const map<Key,T,Compare,Alloc> & lhs, const map<Key,T,Compare,Alloc> & rhs)

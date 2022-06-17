@@ -3,6 +3,15 @@
 
 # include "includes/containers.hpp"
 
+// red-black tree map implementation :
+// 1. a node is either red or black (binary)
+// 2. root and leaves must be black
+// 3. if a node is red it's children are black
+// 4. all paths from a node to its NIL descendants
+//    contain the same number of black nodes
+// 5. items to the left are always smaller
+// 
+
 namespace ft
 {
 

@@ -3,9 +3,9 @@
 
 namespace ft
 {
-	//////////////////////////////
-	// Enable If
-	//////////////////////////////
+	///////////////
+	// Enable If //
+	///////////////
 
 	template <bool B, class T = void>
 	struct enable_if {};
@@ -13,9 +13,9 @@ namespace ft
 	template <class T>
 	struct enable_if<true, T> { typedef T type; };
 
-	//////////////////////////////
-	// Is Same
-	//////////////////////////////
+	/////////////
+	// Is Same //
+	/////////////
 
 	template <class T, class U>
 	struct is_same { static const bool value = false; };
@@ -23,9 +23,9 @@ namespace ft
 	template <class T>
 	struct is_same<T, T> { static const bool value = true; };
 
-	//////////////////////////////
-	// Conditional
-	//////////////////////////////
+	/////////////////
+	// Conditional //
+	/////////////////
 
 	template <bool B, class T = void, class U = void>
 	struct conditional {};

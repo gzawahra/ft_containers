@@ -429,8 +429,7 @@ public:
 	}
 
 	// Returns a comparison object that can be used to compare two elements to get whether 
-	//	
-	wthe key of the first one goes before the second.
+	// the key of the first one goes before the second.
 	value_compare value_comp (void) const
 	{
 		return (value_compare(_comp));

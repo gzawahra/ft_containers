@@ -5,10 +5,10 @@
 
 namespace ft
 {
-	//////////////////////////////
-	// To string
-	//////////////////////////////
-
+	///////////////
+	// To string //
+	///////////////
+	
 	template <typename T>
 	std::string to_string (T n)
 	{

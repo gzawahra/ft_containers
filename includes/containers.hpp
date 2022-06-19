@@ -9,6 +9,9 @@
 # include "type_traits.hpp"
 # include "utility.hpp"
 
+// RED and BLACK binary search tree
+// implementaion helpers
+
 # ifndef RED_w
 #  define RED_ true
 # endif
@@ -16,6 +19,8 @@
 # ifndef BLACK_
 #  define BLACK_ false
 # endif
+
+// size or capacity define
 
 # ifndef SIZE_OR_CAP_
 #  define SIZE_OR_CAP_ _size

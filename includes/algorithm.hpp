@@ -3,9 +3,9 @@
 
 namespace ft
 {
-	//////////////////////////////
-	// Lexicographical compare
-	//////////////////////////////
+	/////////////////////////////
+	// Lexicographical compare //
+	/////////////////////////////
 
 	template <class InputIterator1, class InputIterator2>
 	bool lexicographical_compare (InputIterator1 lit, InputIterator1 lend, InputIterator2 rit, InputIterator2 rend)
@@ -28,9 +28,9 @@ namespace ft
 		return (a < b);
 	}
 
-	//////////////////////////////
-	// Equal
-	//////////////////////////////
+	///////////
+	// Equal //
+	///////////
 
 	template <class InputIterator1, class InputIterator2>
 	bool equal (InputIterator1 lit, InputIterator1 lend, InputIterator2 rit, InputIterator2 rend)

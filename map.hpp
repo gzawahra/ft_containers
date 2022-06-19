@@ -3,7 +3,7 @@
 
 # include "includes/containers.hpp"
 
-// red-black tree map implementation :
+// red-black binary search tree map implementation :
 // 1. a node is either red or black (binary)
 // 2. root and leaves must be black
 // 3. if a node is red it's children are black
@@ -379,6 +379,7 @@ public:
 			this->_removeNode(ptr, child);
 		}
 	}
+
 	// erase using unique key
 	size_type erase (const key_type & k)
 	{
@@ -389,6 +390,7 @@ public:
 		}
 		return (0);
 	}
+	
 	//  or a range of elements ([first,last)).
 	void erase (iterator first, iterator last)
 	{

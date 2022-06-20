@@ -34,21 +34,21 @@ public:
 
 	explicit stack (const container_type & ctnr = container_type())
 	{
-		_ctnr = ctnr;
+		c = ctnr;
 	}
 
 	//Return size
 	//	Returns the number of elements in the stack.
 	size_type size (void) const
 	{
-		return (_ctnr.size());
+		return (c.size());
 	}
 
 	//	Test whether container is empty
 	//	Returns whether the stack is empty: i.e. whether its size is zero.
 	bool empty (void) const
 	{
-		return (_ctnr.empty());
+		return (c.empty());
 	}
 
 	//	Access next element
@@ -57,12 +57,12 @@ public:
 	//	is the last element inserted into the stack.
 	value_type & top (void)
 	{
-		return (_ctnr.back());
+		return (c.back());
 	}
 
 	const value_type & top (void) const
 	{
-		return (_ctnr.back());
+		return (c.back());
 	}
 
 	//	Inserts a new element at the top of the stack, above its current 
@@ -72,7 +72,7 @@ public:
 	//	push_back of the underlying container object.
 	void push (const value_type & val)
 	{
-		_ctnr.push_back(val);
+		c.push_back(val);
 	}
 
 	//	Removes the element on top of the stack, effectively reducing its size by one.
@@ -80,15 +80,15 @@ public:
 	//	the underlying container object.
 	void pop (void)
 	{
-		_ctnr.pop_back();
+		c.pop_back();
 	}
 
 	///////////////////////
 	// Member variables //
 	//////////////////////
 
-private:
-	container_type		_ctnr;
+protected:
+	container_type		c;
 
 	//////////////////////////
 	// Relational operators //
@@ -98,12 +98,12 @@ private:
 	
 	friend bool operator== (const stack & lhs, const stack & rhs)
 	{
-		return (lhs._ctnr == rhs._ctnr);
+		return (lhs.c == rhs.c);
 	}
 
 	friend bool operator<  (const stack & lhs, const stack & rhs)
 	{
-		return (lhs._ctnr < rhs._ctnr);
+		return (lhs.c < rhs.c);
 	}
 }; // Stack
 

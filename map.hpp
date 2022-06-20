@@ -2,7 +2,8 @@
 # define MAP_HPP
 
 # include "includes/containers.hpp"
-
+#include <chrono>
+#include <thread>
 // red-black binary search tree map implementation :
 // 1. a node is either red or black (binary)
 // 2. root and leaves must be black
@@ -319,17 +320,35 @@ public:
 	//	the number of elements inserted.
 	ft::pair<iterator,bool> insert (const value_type & val)
 	{
+		using std::chrono::high_resolution_clock;
+  	  	using std::chrono::duration_cast;
+   		using std::chrono::duration;
+    	using std::chrono::nanoseconds;
 		iterator it;
+		auto t2 = high_resolution_clock::now();
+		auto t1 = high_resolution_clock::now();
+		//std::cout << "i0" << std::endl;
+		//this->count(val.first)
 		if (this->count(val.first))
 		{
+			std::cout << "i##############################################1" << std::endl;
 			it = this->find(val.first);
+		//	std::cout << "i2" << std::endl;
 			return (ft::make_pair(it, false));
 		}
 		else
 		{
+			t2 = high_resolution_clock::now();
+			auto ms_int = duration_cast<nanoseconds>(t2 - t1);
+			std::cout << ms_int.count() << " -- 2.2rd ns\n" << std::endl;
+			auto t1 = high_resolution_clock::now();
 			it = iterator(this->_new_node(val));
+			t2 = high_resolution_clock::now();
+			ms_int = duration_cast<nanoseconds>(t2 - t1);
+			std::cout << ms_int.count() << " -- 2.5rd ns\n" << std::endl;
 			return (ft::make_pair(it, true));
 		}
+
 	}
 
 	// The function optimizes its insertion time if position points to the element that 
@@ -445,6 +464,7 @@ public:
 	//	iterator to it if found, otherwise it returns an iterator to map::end.
 	iterator find (const key_type & k)
 	{
+		std::cout << "find" << std::endl;
 		if (this->count(k))
 			return (iterator(this->_find_node(_nil->right, k)));
 		else
@@ -453,6 +473,7 @@ public:
 
 	const_iterator find (const key_type & k) const
 	{
+		std::cout << "find const" << std::endl;
 		if (this->count(k))
 			return (const_iterator(this->_find_node(_nil->right, k)));
 		else
@@ -460,15 +481,44 @@ public:
 	}
 
 	// Searches the container for elements with a key equivalent to k and returns the number of matches.
+	// size_type count (const key_type & k) const
+	// {
+	// 	std::cout << "count" << std::endl;
+	// 	using std::chrono::high_resolution_clock;
+  	//   	using std::chrono::duration_cast;
+   	// 	using std::chrono::duration;
+    // 	using std::chrono::nanoseconds;
+	// 	iterator it;
+	// 	auto t1 = high_resolution_clock::now();
+	// 	size_type n = 0;
+	// 	for (const_iterator it = this->begin() ; it != this->end() ; it++)
+	// 	{
+	// 		if (this->_equal(k, it->first))
+	// 			n++;		
+	// 	}
+	// 	auto t2 = high_resolution_clock::now();
+	// 	auto ms_int = duration_cast<nanoseconds>(t2 - t1);
+	// 	std::cout << ms_int.count() << " -- count ns\n" << std::endl;
+	// 	return (n);
+	// }
+
 	size_type count (const key_type & k) const
 	{
-		size_type n = 0;
-		for (const_iterator it = this->begin() ; it != this->end() ; it++)
-		{
-			if (this->_equal(k, it->first))
-				n++;
-		}
-		return (n);
+		std::cout << "count" << std::endl;
+		using std::chrono::high_resolution_clock;
+  	  	using std::chrono::duration_cast;
+   		using std::chrono::duration;
+    	using std::chrono::nanoseconds;
+		auto t1 = high_resolution_clock::now();
+		int i = 0;
+		if(_find_node(this->_leftmost(_nil->right),k))
+			i = 1;
+		std::cout << "i = ";
+		std::cout << i << std::endl;			
+		auto t2 = high_resolution_clock::now();
+		auto ms_int = duration_cast<nanoseconds>(t2 - t1);
+		std::cout << ms_int.count() << " -- count ns\n" << std::endl;
+		return (i);
 	}
 
 	//////////////////////
@@ -547,18 +597,43 @@ private:
 
 	node * _new_node (const value_type & val = value_type())
 	{
-		node * new_node = _alloc.allocate(1);
-		this->_construct(new_node, val);
+		using std::chrono::high_resolution_clock;
+  	  	using std::chrono::duration_cast;
+   		using std::chrono::duration;
+    	using std::chrono::nanoseconds;
+		//std::cout << "i5" << std::endl;
+		 node * new_node = _alloc.allocate(1);
+		 this->_construct(new_node, val);
+		auto t2 = high_resolution_clock::now();
+		std::cout << "yes1" << std::endl;
+		auto t1 = high_resolution_clock::now();
 
+		//std::cout << "i6" << std::endl;
 		node * parent = this->_find_parent(_nil->right, val.first);
 		if (parent == _nil || !this->_comp(val.first, parent->key()))
-			parent->right = new_node;
+		{
+			//std::cout << "i6.1" << std::endl;
+			t2 = high_resolution_clock::now();
+			parent->right = new_node;	
+			 std::cout << "yes2" << std::endl;		
+		}
 		else
+		{
+			//std::cout << "i6.2" << std::endl;
+			t2 = high_resolution_clock::now();
 			parent->left = new_node;
+			std::cout << "yes3" << std::endl;						
+		}
+  		auto ms_int = duration_cast<nanoseconds>(t2 - t1);
+    	std::cout << ms_int.count() <<  " -- 1st ns\n" << std::endl;
+		t1 = high_resolution_clock::now();
+		//std::cout << "i7" << std::endl;
 		new_node->parent = parent;
-
-		this->_insertRB(new_node);
-
+		 this->_insertRB(new_node);
+		//std::cout << "i8" << std::endl;
+		t2 = high_resolution_clock::now();
+  		ms_int = duration_cast<nanoseconds>(t2 - t1);
+    	std::cout << ms_int.count() << " -- 2nd ns\n" << std::endl;
 		return (new_node);
 	}
 
@@ -676,23 +751,32 @@ private:
 
 	void _insertRB (node * x)
 	{
+		//std::cout << "i10" << std::endl;
 		node * parent = x->parent;
 		node * grandparent = parent->parent;
 		node * uncle = (grandparent->right == parent) ? grandparent->left : grandparent->right;
 
 		if (parent == _nil)
+		{
 			x->color = BLACK_;
+			//std::cout << "i11" << std::endl;						
+		}
 		else if (parent->color == BLACK_)
+		{
+			//std::cout << "i12" << std::endl;
 			return ;
+		}
+
 		else if (uncle->color == RED_)
 		{
+			//std::cout << "i14" << std::endl;
 			parent->color = BLACK_;
 			uncle->color = BLACK_;
 			grandparent->color = RED_;
 			this->_insertRB(grandparent);
 		}
 		else if (uncle->color == BLACK_)
-		{
+		{		//std::cout << "i15" << std::endl;
 			if (grandparent->left->left == x || grandparent->right->right == x)
 			{
 				if (grandparent->left->left == x)

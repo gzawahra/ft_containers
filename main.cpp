@@ -2,7 +2,7 @@
 #include <string>
 #include <deque>
 #include <chrono>
-
+#include <thread>
 #if 0 //CREATE A REAL STL EXAMPLE
 	#include <map>
 	#include <stack>
@@ -35,19 +35,18 @@ public:
 	MutantStack(const MutantStack<T>& src) { *this = src; }
 	MutantStack<T>& operator=(const MutantStack<T>& rhs) 
 	{
-		this->x = rhs.x;
+		this->c = rhs.c;
 		return *this;
 	}
 	~MutantStack() {}
 
 	typedef typename ft::stack<T>::container_type::iterator iterator;
 
-	iterator begin() { return this->x.begin(); }
-	iterator end() { return this->x.end(); }
+	iterator begin() { return this->c.begin(); }
+	iterator end() { return this->c.end(); }
 };
 
 int main(int argc, char** argv) {
-	auto start = std::chrono::high_resolution_clock::now();
 	if (argc != 2)
 	{
 		std::cerr << "Usage: ./test seed" << std::endl;
@@ -55,6 +54,10 @@ int main(int argc, char** argv) {
 		std::cerr << "Count value:" << COUNT << std::endl;
 		return 1;
 	}
+	using std::chrono::high_resolution_clock;
+    using std::chrono::duration_cast;
+    using std::chrono::duration;
+    using std::chrono::nanoseconds;
 	const int seed = atoi(argv[1]);
 	srand(seed);
 
@@ -90,12 +93,19 @@ int main(int argc, char** argv) {
 	{
 		//NORMAL ! :P
 	}
-	
+
 	for (int i = 0; i < COUNT; ++i)
 	{
+			std::cout << i ;
+			std::cout << " / ";
+			std::cout << COUNT << std::endl;
+     	auto t1 = high_resolution_clock::now();
 		map_int.insert(ft::make_pair(rand(), rand()));
+		//ft::make_pair(rand(), rand());
+    	auto t2 = high_resolution_clock::now();
+  		auto ms_int = duration_cast<nanoseconds>(t2 - t1);
+    	std::cout << ms_int.count() << " -- 3rd ns\n";
 	}
-
 	int sum = 0;
 	for (int i = 0; i < 10000; i++)
 	{
@@ -109,35 +119,12 @@ int main(int argc, char** argv) {
 	}
 	MutantStack<char> iterable_stack;
 	for (char letter = 'a'; letter <= 'z'; letter++)
-		iterable_stack.push(letter);
+	 	iterable_stack.push(letter);
+
 	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
 	{
 		std::cout << *it;
 	}
 	std::cout << std::endl;
-	auto stop = std::chrono::high_resolution_clock::now();
-	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
- 
-    std::cout << "Time taken by function: "
-         << duration.count() << " microseconds" << std::endl;
 	return (0);
-}
-
-void time_operation()
-{
-	auto start = std::chrono::high_resolution_clock::now();
- 
-    // Call the function, here sort()
-   // sort(values.begin(), values.end());
- 
-    // Get ending timepoint
-    auto stop = std::chrono::high_resolution_clock::now();
- 
-    // Get duration. Substart timepoints to
-    // get duration. To cast it to proper unit
-    // use duration cast method
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
- 
-    std::cout << "Time taken by function: "
-         << duration.count() << " microseconds" << std::endl;
 }

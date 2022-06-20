@@ -2,6 +2,9 @@
 # define CONTAINERS_HPP
 
 # include <iostream>
+# include <vector>
+# include <cstddef>
+# include <iterator>
 
 # include "algorithm.hpp"
 # include "iterator.hpp"

@@ -2,6 +2,7 @@
 # define VECTOR_HPP
 
 # include "includes/containers.hpp"
+# include "includes/is_integral.hpp"
 
 namespace ft
 {
@@ -108,7 +109,7 @@ public:
 	//		with each element constructed from its corresponding element in that range, in the same order.
 	template <class InputIterator>
 	vector (InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type(),
-	typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type* = 0)
+	typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
 	{
 		size_type		n = 0;
 		for (InputIterator cpy = first ; cpy != last && n <= this->max_size() ; cpy++)
@@ -183,12 +184,12 @@ public:
 
 	//Return iterator to beginning
 	// Returns an iterator pointing to the first element in the vector.
-	iterator begin (void)
+	iterator begin ()
 	{
 		return (iterator(_vct));
 	}
 
-	const_iterator begin (void) const
+	const_iterator begin () const
 	{
 		return (const_iterator(_vct));
 	}
@@ -197,12 +198,12 @@ public:
 	// Returns an iterator referring to the past-the-end element in the vector container.
 	iterator end (void)
 	{
-		return (iterator(_vct + _size));
+		return (iterator(_vct + _size - 1));
 	}
 
 	const_iterator end (void) const
 	{
-		return (const_iterator(_vct + _size));
+		return (const_iterator(_vct + _size - 1));
 	}
 
 	///////////////////////
@@ -392,7 +393,7 @@ public:
 	//	in the same order.
 	template <class InputIterator>
 	void assign (InputIterator first, InputIterator last,
-	typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type* = 0)
+	typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
 	{
 		size_type		n = 0;
 		for (InputIterator cpy = first ; cpy != last && n < 1000000 ; cpy++)
@@ -463,7 +464,7 @@ public:
 	//	inserts elements from range [first, last) before pos.
 	template <class InputIterator>
 	void insert (iterator position, InputIterator first, InputIterator last,
-	typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type* = 0)
+	typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
 	{
 		size_type		off = position - this->begin();
 		size_type		n = 0;

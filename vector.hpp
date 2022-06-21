@@ -91,6 +91,7 @@ public:
 		_vct = _alloc.allocate(0);	//	vector var
 		_size = 0;					//	number of current values
 		_capacity = 0;				// 	number of possible values to be held in vector
+				std::cout << "constructv1" << std::endl;
 	}
 
 	//fill constructor: Constructs a container with n elements. Each element is a copy of val.
@@ -103,6 +104,7 @@ public:
 
 		for (size_type i = 0 ; i < n ; i++)
 			_alloc.construct(_vct + i, val);
+					std::cout << "constructv2" << std::endl;
 	}
 
 	//range constructor: Constructs a container with as many elements as the range [first,last), 
@@ -122,6 +124,7 @@ public:
 
 		for (size_type i = 0 ; i < n ; i++)
 			_alloc.construct(_vct + i, *first++);
+					std::cout << "constructv3" << std::endl;
 	}
 
 	//copy constructor: Constructs a container with a copy of each of the elements in x, in the same order.
@@ -148,6 +151,7 @@ public:
 		for (size_type i = 0 ; i < _size ; i++)
 			_alloc.destroy(_vct + i); // destroy all values but doesn't deallocate
 		_alloc.deallocate(_vct, _capacity); // deallocate space taken by vector
+			std::cout << "destruct" << std::endl;
 	}
 
 	/////////////////////////
@@ -198,12 +202,13 @@ public:
 	// Returns an iterator referring to the past-the-end element in the vector container.
 	iterator end (void)
 	{
-		return (iterator(_vct + _size - 1));
+		//std::cout << "end"<< std::endl;
+		return (iterator(_vct + _size));
 	}
 
 	const_iterator end (void) const
 	{
-		return (const_iterator(_vct + _size - 1));
+		return (const_iterator(_vct + _size));
 	}
 
 	///////////////////////

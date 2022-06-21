@@ -337,13 +337,13 @@ public:
 		iterator it;
 		if (this->count(val.first))
 		{
-			//std::cout << "insert1"<<std::endl;
+			std::cout << "insert1"<<std::endl;
 			it = this->find(val.first);
 			return (ft::make_pair(it, false));
 		}
 		else
 		{
-			// std::cout << "insert1.1"<<std::endl;
+			 std::cout << "insert1.1"<<std::endl;
 			it = iterator(this->_new_node(val));
 			return (ft::make_pair(it, true));
 		}
@@ -354,7 +354,7 @@ public:
 	//	will precede the inserted element.
 	iterator insert (iterator position, const value_type & val)
 	{
-					// std::cout << "insert2"<<std::endl;
+					 std::cout << "insert2"<<std::endl;
 		(void)position;
 		return (this->insert(val).first);
 	}
@@ -364,7 +364,7 @@ public:
 	void insert (InputIterator first, InputIterator last,
 	typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type* = 0)
 	{
-					// std::cout << "insert3"<<std::endl;
+					std::cout << "insert3"<<std::endl;
 		while (first != last)
 			this->insert(*first++);
 	}
@@ -602,15 +602,19 @@ private:
 		node * parent = this->_find_parent(_nil->right, val.first);
 		if (parent == _nil || !this->_comp(val.first, parent->key()))
 		{
-
-			parent->right = new_node;			
+			//std::cout << "right" << std::endl;
+			parent->right = new_node;	
+			//PROBLEM
+			??		
 		}
 		else
 		{
+
+			std::cout << "left" << std::endl;
 			parent->left = new_node;						
 		}
 		new_node->parent = parent;
-		 this->_insertRB(new_node);
+		this->_insertRB(new_node);
 		return (new_node);
 	}
 

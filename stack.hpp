@@ -34,6 +34,7 @@ public:
 
 	explicit stack (const container_type & ctnr = container_type())
 	{
+		std::cout << "construct1" << std::endl;
 		c = ctnr;
 	}
 
@@ -41,6 +42,7 @@ public:
 	//	Returns the number of elements in the stack.
 	size_type size (void) const
 	{
+		std::cout << "size" << std::endl;
 		return (c.size());
 	}
 
@@ -48,6 +50,7 @@ public:
 	//	Returns whether the stack is empty: i.e. whether its size is zero.
 	bool empty (void) const
 	{
+		std::cout << "empty" << std::endl;
 		return (c.empty());
 	}
 

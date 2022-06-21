@@ -1,7 +1,9 @@
 #include <iostream>
 #include <string>
 #include <deque>
-#if 0 //CREATE A REAL STL EXAMPLE
+#include <chrono>
+#include <thread>
+#if 1 //CREATE A REAL STL EXAMPLE
 	#include <map>
 	#include <stack>
 	#include <vector>
@@ -36,7 +38,9 @@ public:
 		this->c = rhs.c;
 		return *this;
 	}
-	~MutantStack() {}
+	~MutantStack() {
+				//std::cout << "destructmutant" << std::endl;
+	}
 
 	typedef typename ft::stack<T>::container_type::iterator iterator;
 
@@ -52,6 +56,10 @@ int main(int argc, char** argv) {
 		std::cerr << "Count value:" << COUNT << std::endl;
 		return 1;
 	}
+	using std::chrono::high_resolution_clock;
+    using std::chrono::duration_cast;
+    using std::chrono::duration;
+    using std::chrono::nanoseconds;
 	const int seed = atoi(argv[1]);
 	srand(seed);
 
@@ -73,7 +81,7 @@ int main(int argc, char** argv) {
 		vector_buffer[idx].idx = 5;
 	}
 	ft::vector<Buffer>().swap(vector_buffer);
-
+	//std::cout << 82 << std::endl;
 	try
 	{
 		for (int i = 0; i < COUNT; i++)
@@ -87,12 +95,20 @@ int main(int argc, char** argv) {
 	{
 		//NORMAL ! :P
 	}
-	
+	// std::cout << 96 << std::endl;
 	for (int i = 0; i < COUNT; ++i)
 	{
+			// std::cout << i ;
+			// std::cout << " / ";
+			// std::cout << COUNT << std::endl;
+     	// auto t1 = high_resolution_clock::now();
 		map_int.insert(ft::make_pair(rand(), rand()));
+		//ft::make_pair(rand(), rand());
+    	// auto t2 = high_resolution_clock::now();
+  		// auto ms_int = duration_cast<nanoseconds>(t2 - t1);
+    //	std::cout << ms_int.count() << " -- 3rd ns\n";
 	}
-
+	// std::cout << 109 << std::endl;
 	int sum = 0;
 	for (int i = 0; i < 10000; i++)
 	{
@@ -100,17 +116,26 @@ int main(int argc, char** argv) {
 		sum += map_int[access];
 	}
 	std::cout << "should be constant with the same seed: " << sum << std::endl;
-
+		//std::cout << 116 << std::endl;
 	{
 		ft::map<int, int> copy = map_int;
 	}
+		//std::cout << 120 << std::endl;
 	MutantStack<char> iterable_stack;
+		//	std::cout << 123 << std::endl;
 	for (char letter = 'a'; letter <= 'z'; letter++)
-		iterable_stack.push(letter);
+	 	iterable_stack.push(letter);
+		//std::cout << 125 << std::endl;
+		int i = 0 ;
 	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
 	{
+
 		std::cout << *it;
+		 //std::cout << i << std::endl;
+			i++;
 	}
+	//	std::cout << 130 << std::endl;
 	std::cout << std::endl;
+	//	std::cout << 133 << std::endl;
 	return (0);
 }

@@ -79,18 +79,30 @@ public:
 
 		void nextNode (void)
 		{
+			//std::cout << "nextnode" << std::endl;
 			if (_ptr->right != _ptr->right->left)
 			{
+				//std::cout << "nextnode.1" << std::endl;
 				_ptr = _ptr->right;
+				//std::cout << "nextnode.2" << std::endl;
 				while (_ptr->left != _ptr->left->left)
-					_ptr = _ptr->left;
+				{	
+					//std::cout << "nextnode1" << std::endl;
+					//std::cout << _ptr << std::endl;
+		
+						_ptr = _ptr->left;
+							//	std::cout << "nextnode2" << std::endl;
+				}
+				//std::cout << "nextnode2.5" << std::endl;
 			}
 			else
 			{
+				//std::cout << "nextnode3" << std::endl;
 				while (_ptr == _ptr->parent->right && _ptr != _ptr->parent)
 					_ptr = _ptr->parent;
 				_ptr = _ptr->parent;
 			}
+			//std::cout << "nextnode4" << std::endl;
 		}
 
 		void prevNode (void)
@@ -161,7 +173,7 @@ public:
 
 	//	Constructs an empty container, with no elements.
 	explicit map (const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type())
-	{
+	{		//		std::cout << "construct empty map" << std::endl;
 		_alloc = alloc;
 		_comp = comp;
 		this->_new_nil_node();
@@ -173,6 +185,7 @@ public:
 	map (InputIterator first, InputIterator last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type(),
 	typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type* = 0)
 	{
+	//	std::cout << "construct map 2" << std::endl;
 		_alloc = alloc;
 		_comp = comp;
 		this->_new_nil_node();
@@ -184,6 +197,7 @@ public:
 	//	Constructs a container with a copy of each of the elements in x.
 	map (const map & x)
 	{
+	//					std::cout << "construct map 3" << std::endl;
 		this->_new_nil_node();
 		*this = x;
 	}
@@ -196,9 +210,13 @@ public:
 	//	capacity allocated by the map container using its allocator.
 	~map (void)
 	{
+		//		std::cout << "destruct map" << std::endl;
 		this->clear();
+		//				std::cout << "destruct map1" << std::endl;
 		_alloc.destroy(_nil);
+		//		std::cout << "destruct map2" << std::endl;
 		_alloc.deallocate(_nil, 1);
+		//				std::cout << "destruct map3" << std::endl;
 	}
 
 	/////////////////////////
@@ -337,13 +355,13 @@ public:
 		iterator it;
 		if (this->count(val.first))
 		{
-			std::cout << "insert1"<<std::endl;
+			//std::cout << "insert1"<<std::endl;
 			it = this->find(val.first);
 			return (ft::make_pair(it, false));
 		}
 		else
 		{
-			 std::cout << "insert1.1"<<std::endl;
+			 //std::cout << "insert1.1"<<std::endl;
 			it = iterator(this->_new_node(val));
 			return (ft::make_pair(it, true));
 		}
@@ -354,7 +372,7 @@ public:
 	//	will precede the inserted element.
 	iterator insert (iterator position, const value_type & val)
 	{
-					 std::cout << "insert2"<<std::endl;
+		 //std::cout << "insert2"<<std::endl;
 		(void)position;
 		return (this->insert(val).first);
 	}
@@ -364,7 +382,7 @@ public:
 	void insert (InputIterator first, InputIterator last,
 	typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type* = 0)
 	{
-					std::cout << "insert3"<<std::endl;
+		//std::cout << "insert3"<<std::endl;
 		while (first != last)
 			this->insert(*first++);
 	}
@@ -395,7 +413,6 @@ public:
 				ptr->parent->left = child;
 			else
 				ptr->parent->right = child;
-
 			this->_removeNode(ptr, child);
 		}
 	}
@@ -435,11 +452,19 @@ public:
 	//	leaving the container with a size of 0.
 	void clear (void)
 	{
+		//std::cout << "clear" << std::endl;
 		iterator first = this->begin();
-		for (iterator it = first++ ; it != this->end() ; it = first++)
+		for (iterator it = first++ ; it != this->end(); it = first++)
 			this->erase(it);
 	}
+	void delall (iterator position)
+	{
+		
+		_alloc.destroy(position.getPtr());
+		_alloc.deallocate(position.getPtr(), 1);
 
+	}
+	
 	///////////////
 	// Observers //
 	///////////////
@@ -602,15 +627,10 @@ private:
 		node * parent = this->_find_parent(_nil->right, val.first);
 		if (parent == _nil || !this->_comp(val.first, parent->key()))
 		{
-			//std::cout << "right" << std::endl;
-			parent->right = new_node;	
-			//PROBLEM
-			??		
+			parent->right = new_node;
 		}
 		else
 		{
-
-			std::cout << "left" << std::endl;
 			parent->left = new_node;						
 		}
 		new_node->parent = parent;
@@ -630,6 +650,7 @@ private:
 
 	void _swap_nodes (node * a, node * b)
 	{
+		//std::cout << "swap" << std::endl;
 		if (a->left != b && a->left != _nil)
 			a->left->parent = b;
 		if (a->right != b && a->right != _nil)
@@ -679,15 +700,15 @@ private:
 	}
 
 	void _removeNode (node * ptr, node * child)
-	{
+	{	//std::cout << "remove node" << std::endl;
 		this->_deleteRB(ptr, child);
-
 		_alloc.destroy(ptr);
 		_alloc.deallocate(ptr, 1);
 	}
 
 	node * _find_node (node * current, const key_type & k) const
 	{
+		//			std::cout << "_find_node" << std::endl;
 		if (current == _nil || this->_equal(current->key(), k))
 			return (current);
 		else if (this->_comp(k, current->key()))
@@ -699,6 +720,7 @@ private:
 
 	node * _find_parent (node * current, const key_type & k) const
 	{
+					//std::cout << "find parent" << std::endl;
 		if (!this->_comp(k, current->key()))
 		{
 			if (current->right == _nil)
@@ -716,20 +738,14 @@ private:
 	}
 
 	node * _leftmost (node * root) const
-	{
+	{			//std::cout << "leftmost" << std::endl;
 		while (root->left != root->left->left)
 			root = root->left;
 		return (root);
 	}
-	node * _rightmost (node * root) const
-	{
-		while (root->right != root->right->right)
-			root = root->right;
-		return (root);
-	}
-
 	bool _equal (const key_type & lhs, const key_type & rhs) const
 	{
+				//	std::cout << "_equal" << std::endl;
 		return (this->_comp(lhs, rhs) == false && this->_comp(rhs, lhs) == false);
 	}
 
@@ -739,6 +755,7 @@ private:
 
 	void _insertRB (node * x)
 	{
+					//std::cout << "insertRB" << std::endl;
 		node * parent = x->parent;
 		node * grandparent = parent->parent;
 		node * uncle = (grandparent->right == parent) ? grandparent->left : grandparent->right;
@@ -781,7 +798,8 @@ private:
 	}
 
 	void _deleteRB (node * v, node * u)
-	{
+	{	
+		//std::cout << "deleteRB" << std::endl;
 		if (v->color == RED_ || u->color == RED_)
 			u->color = BLACK_;
 		else
@@ -789,14 +807,20 @@ private:
 	}
 
 	void _doubleBlack (node * u, node * parent)
-	{
+	{	
+		//std::cout << "double black" << std::endl;
+		//std::cout << this->size() << std::endl;
 		node * sibling = (parent->left != u) ? parent->left : parent->right;
+		//std::cout << "db1" << std::endl;
+//		if(_nil == _nil->right)
+		//	return ;
 
-		if (u == _nil->right)
+		if (u == _nil->right || _nil == _nil->right || parent != _nil->left)
 			return ;
 		else if (sibling->color == BLACK_ && (sibling->left->color == RED_ || sibling->right->color == RED_))
 		{
-			if (sibling == parent->left && sibling->left->color == RED_)
+			//std::cout << "double black1.1" << std::endl;
+			if (sibling == parent->left && sibling->left->color == RED_ )
 				this->_LL(parent, sibling);
 			else if (sibling == parent->left && sibling->right->color == RED_)
 				this->_LR(parent, sibling, sibling->right);
@@ -804,33 +828,58 @@ private:
 				this->_RR(parent, sibling);
 			else if (sibling == parent->right && sibling->left->color == RED_)
 				this->_RL(parent, sibling, sibling->left);
-
+			//std::cout << "double black1.2" << std::endl;
 			if (sibling->left->color == RED_)
 				sibling->left->color = BLACK_;
 			else
 				sibling->right->color = BLACK_;
+			//std::cout << "double black1.3" << std::endl;
 		}
 		else if (sibling->color == BLACK_)
 		{
+			//std::cout << "double black1.4" << std::endl;
 			sibling->color = RED_;
 			if (parent->color == RED_)
 				parent->color = BLACK_;
-			else
+			else if(_nil != _nil->right)
 				this->_doubleBlack(parent, parent->parent);
+			else
+				return;
+			//std::cout << "double black1.5" << std::endl;
 		}
 		else if (sibling->color == RED_)
 		{
+			//	std::cout << "double black2" << std::endl;
 			if (sibling == parent->left)
+			{
+			//	std::cout << "double black2.5" << std::endl;
 				this->_LL(parent, sibling);
+			}
 			else
+			{
+			//	std::cout << "double black2.8" << std::endl;
+				// std::cout << sibling << std::endl;
+				// std::cout << parent << std::endl;
+				// std::cout << _nil << std::endl;
+				// std::cout << _nil->left << std::endl;
+				// std::cout << _nil->right << std::endl;
+				//if(parent!=NULL && sibling != NULL)
 				this->_RR(parent, sibling);
+			//	std::cout << "double black2.9" << std::endl;
+			}
+			//std::cout << "double black3" << std::endl;
 			ft::swap(parent->color, sibling->color);
-			this->_doubleBlack(u, parent);
+			//std::cout << "double black4" << std::endl;
+				this->_doubleBlack(u, parent);
+			//std::cout << this->size() << std::endl;
+		//	std::cout << "double black5" << std::endl;
 		}
+		//	std::cout << "double black6" << std::endl;
 	}
 
 	void _LL (node * grandparent, node * parent)
 	{
+			//		std::cout << "_LL" << std::endl;
 		if (grandparent->parent->right == grandparent)
 			grandparent->parent->right = parent;
 		else
@@ -845,12 +894,14 @@ private:
 
 	void _RR (node * grandparent, node * parent)
 	{
+	//	std::cout << "_RR" << std::endl;
 		if (grandparent->parent->right == grandparent)
 			grandparent->parent->right = parent;
 		else
 			grandparent->parent->left = parent;
 		if (parent->left != _nil)
 			parent->left->parent = grandparent;
+		
 		grandparent->right = parent->left;
 		parent->parent = grandparent->parent;
 		grandparent->parent = parent;
@@ -859,6 +910,7 @@ private:
 
 	void _LR (node * grandparent, node * parent, node * x)
 	{
+				//	std::cout << "_LR" << std::endl;
 		if (grandparent->parent->right == grandparent)
 			grandparent->parent->right = x;
 		else
@@ -878,6 +930,7 @@ private:
 
 	void _RL (node * grandparent, node * parent, node * x)
 	{
+					//std::cout << "_RL" << std::endl;
 		if (grandparent->parent->right == grandparent)
 			grandparent->parent->right = x;
 		else

@@ -41,9 +41,18 @@ int main(int argc, char** argv) {
     std::cout << "vector/copy vector data" << std::endl;
     for(int i = 124300; i <= 124310; i++)
      std::cout << vector_int[i] << std::endl;
-    std::cout << "############" << std::endl;
+    std::cout << "################" << std::endl;
     for(int i = 124300; i <= 124310; i++)
      std::cout << copy_vector_int[i] << std::endl;
+    std::cout << "################" << std::endl;
+
+    std::cout << "pop_back 100" << std::endl;
+    for(int i = 154300; i <= 154400; i++)
+     vector_int.pop_back();
+    std::cout << "push_back 100" << std::endl;
+    for(int i = 154300; i <= 154410; i++)
+     vector_int.push_back();
+
 
 
 }

@@ -6,6 +6,26 @@
 
 namespace ft {
 
+	//	Trait class that identifies whether T is an integral type.
+	// It inherits from integral_constant as being either true_type or false_type, depending on whether T is an integral type:
+
+	// fundamental integral types:
+	// bool
+	// char
+	// char16_t
+	// char32_t
+	// wchar_t
+	// signed char
+	// short int
+	// int
+	// long int
+	// long long int
+	// unsigned char
+	// unsigned short int
+	// unsigned int
+	// unsigned long int
+	// unsigned long long int
+	
 	template <bool is_integral, typename T>
 	struct is_integral_res
 	{

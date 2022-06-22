@@ -7,6 +7,7 @@ namespace ft
 	// Lexicographical compare //
 	/////////////////////////////
 
+	// compare lexicographically ordering like a dictionary ex: ship < sit 
 	template <class InputIterator1, class InputIterator2>
 	bool lexicographical_compare (InputIterator1 lit, InputIterator1 lend, InputIterator2 rit, InputIterator2 rend)
 	{
@@ -32,6 +33,7 @@ namespace ft
 	// Equal //
 	///////////
 
+	// check equality
 	template <class InputIterator1, class InputIterator2>
 	bool equal (InputIterator1 lit, InputIterator1 lend, InputIterator2 rit, InputIterator2 rend)
 	{

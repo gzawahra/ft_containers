@@ -62,6 +62,19 @@ namespace ft
 		a = b;
 		b = tmp;
 	}
+
+	///////////////
+	// To string //
+	///////////////
+	
+	// stream string output.
+	template <typename T>
+	std::string to_string (T n)
+	{
+		std::ostringstream	ss;
+		ss << n;
+		return (ss.str());
+	}
 }
 
 # endif

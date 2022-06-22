@@ -9,6 +9,7 @@ namespace ft
 	// To string //
 	///////////////
 	
+	// stream string output.
 	template <typename T>
 	std::string to_string (T n)
 	{

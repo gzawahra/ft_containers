@@ -77,6 +77,7 @@ public:
 	private:
 		node_type *				_ptr;
 
+		// get next node pointer in binary tree
 		void nextNode (void)
 		{
 			if (_ptr->right != _ptr->right->left)
@@ -93,6 +94,7 @@ public:
 			}
 		}
 
+		// get previous node pointer in binary tree
 		void prevNode (void)
 		{
 			if (_ptr == _ptr->parent)
@@ -252,7 +254,7 @@ public:
 	///////////////////////
 
 	// Returns a reverse iterator pointing to the last element in the container 
-	//(i.e., its reverse beginning).
+	//	(i.e., its reverse beginning).
 	reverse_iterator rbegin (void)
 	{
 		return (reverse_iterator(_nil));
@@ -460,7 +462,7 @@ public:
 			return (this->end());
 	}
 
-	// Searches the container for elements with a key equivalent to k and returns the number of matches.
+	// Searchs the container for elements with a key equivalent to k and returns the number of matches.
 	size_type count (const key_type & k) const
 	{
 		node*	currentNode;
@@ -536,7 +538,7 @@ public:
 	// Allocator //
 	///////////////
 
-	// yReturns a copy of the allocator object associated with the map.
+	// Returns a copy of the allocator object associated with the map.
 	allocator_type get_allocator (void) const
 	{
 		return (allocator_type());
@@ -545,8 +547,8 @@ public:
 	///////////////////////
 	// Private functions //
 	///////////////////////
-
 private:
+	// create new end node
 	void _new_nil_node (void)
 	{
 		_nil = _alloc.allocate(1);
@@ -554,6 +556,7 @@ private:
 		_nil->color = BLACK_;
 	}
 
+	// create new node
 	node * _new_node (const value_type & val = value_type())
 	{
 	
@@ -573,6 +576,7 @@ private:
 		return (new_node);
 	}
 
+	// construct a new node 
 	void _construct (node * ptr, const value_type & val = value_type())
 	{
 		node tmp(val);
@@ -583,6 +587,7 @@ private:
 		_alloc.construct(ptr, tmp);
 	}
 
+	// swap two nodes
 	void _swap_nodes (node * a, node * b)
 	{
 		if (a->left != b && a->left != _nil)
@@ -633,6 +638,7 @@ private:
 			_nil->right = a;
 	}
 
+	// remove node, destroy, and deallocate.
 	void _removeNode (node * ptr, node * child)
 	{
 		this->_deleteRB(ptr, child);
@@ -640,6 +646,7 @@ private:
 		_alloc.deallocate(ptr, 1);
 	}
 
+	// search a certain node corresponding to a given key.
 	node * _find_node (node * current, const key_type & k) const
 	{
 		if (current == _nil || this->_equal(current->key(), k))
@@ -650,7 +657,7 @@ private:
 			return (this->_find_node(current->right, k));
 	}
 
-
+	// _find a given node's parent according to a key.
 	node * _find_parent (node * current, const key_type & k) const
 	{
 		if (!this->_comp(k, current->key()))
@@ -669,12 +676,15 @@ private:
 		}
 	}
 
+	// find leftmost ( lowest node) in the RB tree.
 	node * _leftmost (node * root) const
 	{
 		while (root->left != root->left->left)
 			root = root->left;
 		return (root);
 	}
+
+	// check if 
 	bool _equal (const key_type & lhs, const key_type & rhs) const
 	{
 		return (this->_comp(lhs, rhs) == false && this->_comp(rhs, lhs) == false);
@@ -684,6 +694,7 @@ private:
 	// Red and Black Tree //
 	////////////////////////
 
+	// insert  node into tree and balance the tree with LR / RR / RL / LL.
 	void _insertRB (node * x)
 	{
 		node * parent = x->parent;
@@ -727,6 +738,7 @@ private:
 		}
 	}
 
+	// 
 	void _deleteRB (node * v, node * u)
 	{	
 		if (v->color == RED_ || u->color == RED_)
@@ -735,6 +747,7 @@ private:
 			this->_doubleBlack(u, v->parent);
 	}
 
+	// 
 	void _doubleBlack (node * u, node * parent)
 	{	
 		node * sibling = (parent->left != u) ? parent->left : parent->right;
@@ -777,6 +790,8 @@ private:
 		}
 	}
 
+	// tree manipulation fonctions to balance 
+	// the red/black tree.
 	void _LL (node * grandparent, node * parent)
 	{
 		if (grandparent->parent->right == grandparent)
